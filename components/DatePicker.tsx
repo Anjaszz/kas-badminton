@@ -1,0 +1,263 @@
+'use client';
+
+import React, { useState, useRef, useEffect } from 'react';
+import { Calendar as CalendarIcon, ChevronLeft, ChevronRight } from 'lucide-react';
+import { formatDateIndo } from '../lib/dataService';
+
+interface DatePickerProps {
+  value: string; // Format: 'YYYY-MM-DD'
+  onChange: (date: string) => void;
+  label?: string;
+  placeholder?: string;
+  className?: string;
+}
+
+export default function DatePicker({
+  value,
+  onChange,
+  label,
+  placeholder = 'Pilih tanggal...',
+  className = '',
+}: DatePickerProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Parse initial date or fallback to today
+  const initialDate = value ? new Date(value + 'T00:00:00') : new Date();
+  const [viewYear, setViewYear] = useState(initialDate.getFullYear());
+  const [viewMonth, setViewMonth] = useState(initialDate.getMonth()); // 0-11
+
+  // Keep view in sync when value changes externally
+  useEffect(() => {
+    if (value) {
+      const d = new Date(value + 'T00:00:00');
+      if (!isNaN(d.getTime())) {
+        setViewYear(d.getFullYear());
+        setViewMonth(d.getMonth());
+      }
+    }
+  }, [value]);
+
+  // Close when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen]);
+
+  const monthNames = [
+    'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+    'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember',
+  ];
+
+  const daysOfWeek = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
+
+  const prevMonth = () => {
+    if (viewMonth === 0) {
+      setViewMonth(11);
+      setViewYear((y) => y - 1);
+    } else {
+      setViewMonth((m) => m - 1);
+    }
+  };
+
+  const nextMonth = () => {
+    if (viewMonth === 11) {
+      setViewMonth(0);
+      setViewYear((y) => y + 1);
+    } else {
+      setViewMonth((m) => m + 1);
+    }
+  };
+
+  // Generate days in month
+  const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+  const firstDayIndex = new Date(viewYear, viewMonth, 1).getDay();
+
+  // Previous month trailing days
+  const prevMonthDays = new Date(viewYear, viewMonth, 0).getDate();
+
+  const handleSelectDate = (day: number) => {
+    const formattedMonth = String(viewMonth + 1).padStart(2, '0');
+    const formattedDay = String(day).padStart(2, '0');
+    const selectedString = `${viewYear}-${formattedMonth}-${formattedDay}`;
+    onChange(selectedString);
+    setIsOpen(false);
+  };
+
+  // Quick shortcuts
+  const setQuickDate = (offsetDays: number) => {
+    const d = new Date();
+    d.setDate(d.getDate() + offsetDays);
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    onChange(`${y}-${m}-${day}`);
+    setViewYear(y);
+    setViewMonth(d.getMonth());
+    setIsOpen(false);
+  };
+
+  const isToday = (day: number) => {
+    const now = new Date();
+    return (
+      now.getFullYear() === viewYear &&
+      now.getMonth() === viewMonth &&
+      now.getDate() === day
+    );
+  };
+
+  const isSelected = (day: number) => {
+    if (!value) return false;
+    const [y, m, d] = value.split('-').map(Number);
+    return y === viewYear && m === viewMonth + 1 && d === day;
+  };
+
+  return (
+    <div className={`relative ${className}`} ref={containerRef}>
+      {label && (
+        <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-1.5">
+          {label}
+        </label>
+      )}
+
+      {/* Trigger Button */}
+      <button
+        type="button"
+        onClick={() => setIsOpen((prev) => !prev)}
+        className={`w-full flex items-center justify-between bg-[#0a0a0f] border border-zinc-700/80 hover:border-zinc-500 rounded-xl px-3.5 py-2.5 text-sm text-left transition-all ${
+          isOpen ? 'border-red-500 ring-1 ring-red-500/30' : ''
+        }`}
+      >
+        <div className="flex items-center gap-2.5 truncate">
+          <CalendarIcon className="w-4 h-4 text-zinc-400 flex-shrink-0" />
+          <span className={value ? 'text-white font-medium' : 'text-zinc-500'}>
+            {value ? formatDateIndo(value) : placeholder}
+          </span>
+        </div>
+        <span className="text-[10px] font-semibold text-zinc-400 bg-zinc-800/80 px-2 py-0.5 rounded border border-zinc-700">
+          Pilih
+        </span>
+      </button>
+
+      {/* Overlay Panel (Calendar Dropdown) */}
+      {isOpen && (
+        <div className="absolute top-full left-0 sm:left-0 mt-2 z-50 w-72 sm:w-80 max-w-[calc(100vw-2.5rem)] bg-[#14141c] border border-[#2b2b3b] rounded-2xl p-3.5 sm:p-4 shadow-2xl animate-in fade-in zoom-in-95 duration-150">
+          
+          {/* Calendar Header */}
+          <div className="flex items-center justify-between mb-3 pb-2 border-b border-zinc-800">
+            <button
+              type="button"
+              onClick={prevMonth}
+              className="p-1.5 rounded-lg bg-zinc-800/70 hover:bg-zinc-700 text-zinc-300 hover:text-white transition-colors"
+              title="Bulan sebelumnya"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+
+            <span className="text-sm font-bold text-white tracking-wide">
+              {monthNames[viewMonth]} {viewYear}
+            </span>
+
+            <button
+              type="button"
+              onClick={nextMonth}
+              className="p-1.5 rounded-lg bg-zinc-800/70 hover:bg-zinc-700 text-zinc-300 hover:text-white transition-colors"
+              title="Bulan berikutnya"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+
+          {/* Days of Week Header */}
+          <div className="grid grid-cols-7 gap-1 text-center mb-2">
+            {daysOfWeek.map((d, idx) => (
+              <span
+                key={d}
+                className={`text-[11px] font-bold ${
+                  idx === 0 ? 'text-red-400' : 'text-zinc-500'
+                }`}
+              >
+                {d}
+              </span>
+            ))}
+          </div>
+
+          {/* Calendar Grid */}
+          <div className="grid grid-cols-7 gap-1 text-center">
+            {/* Previous month empty days */}
+            {Array.from({ length: firstDayIndex }).map((_, i) => {
+              const dayNum = prevMonthDays - firstDayIndex + i + 1;
+              return (
+                <div
+                  key={`prev-${i}`}
+                  className="h-8 flex items-center justify-center text-xs text-zinc-600 select-none"
+                >
+                  {dayNum}
+                </div>
+              );
+            })}
+
+            {/* Current month days */}
+            {Array.from({ length: daysInMonth }).map((_, i) => {
+              const day = i + 1;
+              const selected = isSelected(day);
+              const today = isToday(day);
+
+              return (
+                <button
+                  type="button"
+                  key={day}
+                  onClick={() => handleSelectDate(day)}
+                  className={`h-8 w-8 mx-auto rounded-xl flex items-center justify-center text-xs font-medium transition-all ${
+                    selected
+                      ? 'bg-red-600 text-white font-bold shadow-md shadow-red-900/50 scale-105'
+                      : today
+                      ? 'bg-zinc-800 border border-emerald-500 text-emerald-400 font-bold hover:bg-zinc-700'
+                      : 'text-zinc-200 hover:bg-zinc-800 hover:text-white'
+                  }`}
+                >
+                  {day}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Quick Shortcuts Footer */}
+          <div className="mt-3 pt-3 border-t border-zinc-800 flex items-center justify-between text-xs">
+            <button
+              type="button"
+              onClick={() => setQuickDate(-7)}
+              className="text-zinc-400 hover:text-white px-2 py-1 rounded hover:bg-zinc-800 transition-colors"
+            >
+              -1 Minggu
+            </button>
+            <button
+              type="button"
+              onClick={() => setQuickDate(-1)}
+              className="text-zinc-400 hover:text-white px-2 py-1 rounded hover:bg-zinc-800 transition-colors"
+            >
+              Kemarin
+            </button>
+            <button
+              type="button"
+              onClick={() => setQuickDate(0)}
+              className="text-emerald-400 font-semibold hover:text-emerald-300 px-2 py-1 rounded hover:bg-zinc-800 transition-colors"
+            >
+              Hari Ini
+            </button>
+          </div>
+
+        </div>
+      )}
+    </div>
+  );
+}
