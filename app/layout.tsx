@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -12,9 +12,22 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+export const viewport: Viewport = {
+  themeColor: "#0c0c10",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+};
+
 export const metadata: Metadata = {
-  title: "Kas Badminton AX - Manajemen Kas Mingguan",
+  title: "Kas Badminton - Manajemen Kas Mingguan",
   description: "Aplikasi pencatatan kas badminton mingguan, anggota, iuran, pengeluaran dan laporan saldo.",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Kas Badminton",
+  },
   icons: {
     icon: "/logo-ax.png",
     shortcut: "/logo-ax.png",
@@ -38,4 +51,3 @@ export default function RootLayout({
     </html>
   );
 }
-

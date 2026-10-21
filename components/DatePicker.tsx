@@ -10,6 +10,7 @@ interface DatePickerProps {
   label?: string;
   placeholder?: string;
   className?: string;
+  direction?: 'auto' | 'up' | 'down';
 }
 
 export default function DatePicker({
@@ -18,8 +19,10 @@ export default function DatePicker({
   label,
   placeholder = 'Pilih tanggal...',
   className = '',
+  direction = 'auto',
 }: DatePickerProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [placement, setPlacement] = useState<'down' | 'up'>('down');
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Parse initial date or safe default
@@ -76,6 +79,28 @@ export default function DatePicker({
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isOpen]);
+
+  // Determine placement (open up vs down based on available space)
+  useEffect(() => {
+    if (isOpen && containerRef.current) {
+      if (direction === 'up') {
+        setPlacement('up');
+        return;
+      }
+      if (direction === 'down') {
+        setPlacement('down');
+        return;
+      }
+      const rect = containerRef.current.getBoundingClientRect();
+      const spaceBelow = window.innerHeight - rect.bottom;
+      // If less than 350px below, flip upwards
+      if (spaceBelow < 350) {
+        setPlacement('up');
+      } else {
+        setPlacement('down');
+      }
+    }
+  }, [isOpen, direction]);
 
   const monthNames = [
     'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
@@ -174,7 +199,13 @@ export default function DatePicker({
 
       {/* Overlay Panel (Calendar Dropdown) */}
       {isOpen && (
-        <div className="absolute top-full left-0 sm:left-0 mt-2 z-50 w-72 sm:w-80 max-w-[calc(100vw-2.5rem)] bg-[#14141c] border border-[#2b2b3b] rounded-2xl p-3.5 sm:p-4 shadow-2xl animate-in fade-in zoom-in-95 duration-150">
+        <div
+          className={`absolute left-0 z-50 w-72 sm:w-80 max-w-[calc(100vw-2.5rem)] bg-[#14141c] border border-[#2b2b3b] rounded-2xl p-3.5 sm:p-4 shadow-2xl animate-in fade-in zoom-in-95 duration-150 ${
+            placement === 'up'
+              ? 'bottom-full mb-2 shadow-[0_-12px_40px_rgba(0,0,0,0.9)]'
+              : 'top-full mt-2 shadow-[0_12px_40px_rgba(0,0,0,0.9)]'
+          }`}
+        >
           
           {/* Calendar Header */}
           <div className="flex items-center justify-between mb-3 pb-2 border-b border-zinc-800">

@@ -11,6 +11,9 @@ import AddMemberModal from '../components/AddMemberModal';
 import WeeklyReportModal from '../components/WeeklyReportModal';
 import ConfirmModal from '../components/ConfirmModal';
 import LoginModal from '../components/LoginModal';
+import PWAInstallBanner from '../components/PWAInstallBanner';
+import EditTransactionModal from '../components/EditTransactionModal';
+import { StatCardsSkeleton, MemberSectionSkeleton, TransactionSectionSkeleton } from '../components/DashboardSkeleton';
 
 import { Member, Transaction, MemberSummary } from '../lib/types';
 import {
@@ -19,6 +22,7 @@ import {
   deleteMember,
   fetchTransactions,
   createTransaction,
+  updateTransaction,
   deleteTransaction,
   formatRupiah,
 } from '../lib/dataService';
@@ -26,8 +30,8 @@ import { getSupabaseCredentials, INITIAL_MEMBERS, INITIAL_TRANSACTIONS } from '.
 import { Users, ReceiptText, Calendar, Plus, Sparkles, CheckCircle, AlertTriangle, Coins, Settings, Edit3 } from 'lucide-react';
 
 export default function Home() {
-  const [members, setMembers] = useState<Member[]>(INITIAL_MEMBERS);
-  const [transactions, setTransactions] = useState<Transaction[]>(INITIAL_TRANSACTIONS);
+  const [members, setMembers] = useState<Member[]>([]);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSupabaseConnected, setIsSupabaseConnected] = useState(false);
   const [activeTab, setActiveTab] = useState<'members' | 'transactions'>('members');
@@ -62,6 +66,9 @@ export default function Home() {
     onConfirm: () => {},
   });
   const [isDeleting, setIsDeleting] = useState(false);
+
+  // Edit Transaction State
+  const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
 
   // Preselected member for fast payment
   const [preselectedMember, setPreselectedMember] = useState<Member | null>(null);
@@ -278,6 +285,14 @@ export default function Home() {
     });
   };
 
+  const handleSaveEditedTransaction = async (updatedTx: Transaction) => {
+    const res = await updateTransaction(updatedTx);
+    if (res.success && res.data) {
+      setTransactions((prev) => prev.map((t) => (t.id === updatedTx.id ? res.data! : t)));
+      showToast('Catatan transaksi berhasil diperbarui! ✏️');
+    }
+  };
+
   const handleQuickPayMember = (member: Member) => {
     setPreselectedMember(member);
     setIsIncomeModalOpen(true);
@@ -305,6 +320,9 @@ export default function Home() {
         onOpenLogin={() => setIsLoginModalOpen(true)}
         onLogout={handleLogout}
       />
+
+      {/* Alert Informasi Install PWA di bawah Navbar */}
+      <PWAInstallBanner />
 
       {/* Main Container */}
       <main className="max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 md:py-8 space-y-4 sm:space-y-6 md:space-y-8 flex-1">
@@ -383,16 +401,20 @@ export default function Home() {
         </div>
 
         {/* 4 Stat Cards: Saldo Total, Kas Masuk, Pengeluaran (+Tombol Catat Pengeluaran jika Admin), Status Mingguan */}
-        <StatCards
-          totalBalance={totalBalance}
-          totalIncome={totalIncome}
-          totalExpense={totalExpense}
-          memberCount={members.length}
-          paidThisWeekCount={paidThisWeekCount}
-          currentWeekLabel={currentWeekLabel}
-          onOpenExpense={() => setIsExpenseModalOpen(true)}
-          isAdmin={isAdmin}
-        />
+        {isLoading ? (
+          <StatCardsSkeleton />
+        ) : (
+          <StatCards
+            totalBalance={totalBalance}
+            totalIncome={totalIncome}
+            totalExpense={totalExpense}
+            memberCount={members.length}
+            paidThisWeekCount={paidThisWeekCount}
+            currentWeekLabel={currentWeekLabel}
+            onOpenExpense={() => setIsExpenseModalOpen(true)}
+            isAdmin={isAdmin}
+          />
+        )}
 
         {/* Navigation Tabs (Anggota vs Riwayat Kas) */}
         <div className="border-b border-zinc-800 flex items-center gap-3 sm:gap-6 pt-2 overflow-x-auto">
@@ -422,7 +444,13 @@ export default function Home() {
         </div>
 
         {/* Tab Content */}
-        {activeTab === 'members' ? (
+        {isLoading ? (
+          activeTab === 'members' ? (
+            <MemberSectionSkeleton />
+          ) : (
+            <TransactionSectionSkeleton />
+          )
+        ) : activeTab === 'members' ? (
           <MemberSection
             summaries={memberSummaries}
             onOpenAddMember={() => setIsAddMemberModalOpen(true)}
@@ -435,6 +463,7 @@ export default function Home() {
           <TransactionSection
             transactions={transactions}
             onDeleteTransaction={handleDeleteTransaction}
+            onEditTransaction={(tx) => setEditingTransaction(tx)}
             onOpenIncome={() => {
               setPreselectedMember(null);
               setIsIncomeModalOpen(true);
@@ -506,6 +535,17 @@ export default function Home() {
         message={confirmModal.message}
         confirmText={confirmModal.confirmText}
         isLoading={isDeleting}
+      />
+
+      {/* Modal Edit Transaksi */}
+      <EditTransactionModal
+        isOpen={Boolean(editingTransaction)}
+        onClose={() => setEditingTransaction(null)}
+        transaction={editingTransaction}
+        members={members}
+        onSave={handleSaveEditedTransaction}
+        currentBalance={totalBalance}
+        weeklyFee={weeklyFee}
       />
 
       {/* Modal Login Admin */}

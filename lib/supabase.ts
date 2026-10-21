@@ -1,23 +1,9 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { Member, Transaction } from './types';
 
-// Default initial data for demo/offline fallback
-export const INITIAL_MEMBERS: Member[] = [
-  { id: 'm-1', name: 'Anjas (Admin)', avatar_color: '#ef4444', status: 'active', created_at: new Date().toISOString() },
-  { id: 'm-2', name: 'Budi Santoso', avatar_color: '#3b82f6', status: 'active', created_at: new Date().toISOString() },
-  { id: 'm-3', name: 'Rian Ardianto', avatar_color: '#10b981', status: 'active', created_at: new Date().toISOString() },
-  { id: 'm-4', name: 'Fajar Alfian', avatar_color: '#f59e0b', status: 'active', created_at: new Date().toISOString() },
-  { id: 'm-5', name: 'Kevin Sanjaya', avatar_color: '#ec4899', status: 'active', created_at: new Date().toISOString() },
-];
-
-export const INITIAL_TRANSACTIONS: Transaction[] = [
-  { id: 't-1', type: 'income', amount: 20000, category: 'Iuran Mingguan', description: 'Uang kas minggu ini', member_id: 'm-1', member_name: 'Anjas (Admin)', week_label: 'Minggu 3 - Oktober', date: '2026-10-18', created_at: new Date().toISOString() },
-  { id: 't-2', type: 'income', amount: 20000, category: 'Iuran Mingguan', description: 'Uang kas minggu ini', member_id: 'm-2', member_name: 'Budi Santoso', week_label: 'Minggu 3 - Oktober', date: '2026-10-18', created_at: new Date().toISOString() },
-  { id: 't-3', type: 'income', amount: 20000, category: 'Iuran Mingguan', description: 'Uang kas minggu ini', member_id: 'm-3', member_name: 'Rian Ardianto', week_label: 'Minggu 3 - Oktober', date: '2026-10-18', created_at: new Date().toISOString() },
-  { id: 't-4', type: 'expense', amount: 45000, category: 'Sewa Lapangan', description: 'Sewa GOR Badminton (2 Jam)', date: '2026-10-18', created_at: new Date().toISOString() },
-  { id: 't-5', type: 'expense', amount: 95000, category: 'Beli Shuttlecock', description: '1 Slop Kok Samurai Hijau', date: '2026-10-19', created_at: new Date().toISOString() },
-  { id: 't-6', type: 'income', amount: 20000, category: 'Iuran Mingguan', description: 'Bayar kas sesi minggu depan', member_id: 'm-4', member_name: 'Fajar Alfian', week_label: 'Minggu 4 - Oktober', date: '2026-10-20', created_at: new Date().toISOString() },
-];
+// Default initial data: empty (no dummy data)
+export const INITIAL_MEMBERS: Member[] = [];
+export const INITIAL_TRANSACTIONS: Transaction[] = [];
 
 export function getSupabaseCredentials(): { url: string; key: string; isConfigured: boolean } {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
@@ -61,16 +47,23 @@ const STORAGE_MEMBERS = 'kb_members_data';
 const STORAGE_TRANSACTIONS = 'kb_transactions_data';
 
 export function getLocalMembers(): Member[] {
-  if (typeof window === 'undefined') return INITIAL_MEMBERS;
+  if (typeof window === 'undefined') return [];
   const data = localStorage.getItem(STORAGE_MEMBERS);
-  if (!data) {
-    localStorage.setItem(STORAGE_MEMBERS, JSON.stringify(INITIAL_MEMBERS));
-    return INITIAL_MEMBERS;
-  }
+  if (!data) return [];
   try {
-    return JSON.parse(data);
+    const parsed = JSON.parse(data);
+    if (Array.isArray(parsed)) {
+      // Clean up old dummy members if they exist
+      const hasOldDummy = parsed.some((m: Member) => m.id === 'm-1' || m.id === 'm-2' || m.name?.includes('(Admin)'));
+      if (hasOldDummy) {
+        localStorage.removeItem(STORAGE_MEMBERS);
+        return [];
+      }
+      return parsed;
+    }
+    return [];
   } catch {
-    return INITIAL_MEMBERS;
+    return [];
   }
 }
 
@@ -81,16 +74,23 @@ export function saveLocalMembers(members: Member[]) {
 }
 
 export function getLocalTransactions(): Transaction[] {
-  if (typeof window === 'undefined') return INITIAL_TRANSACTIONS;
+  if (typeof window === 'undefined') return [];
   const data = localStorage.getItem(STORAGE_TRANSACTIONS);
-  if (!data) {
-    localStorage.setItem(STORAGE_TRANSACTIONS, JSON.stringify(INITIAL_TRANSACTIONS));
-    return INITIAL_TRANSACTIONS;
-  }
+  if (!data) return [];
   try {
-    return JSON.parse(data);
+    const parsed = JSON.parse(data);
+    if (Array.isArray(parsed)) {
+      // Clean up old dummy transactions if they exist
+      const hasOldDummy = parsed.some((t: Transaction) => t.id === 't-1' || t.id === 't-2' || t.member_id === 'm-1');
+      if (hasOldDummy) {
+        localStorage.removeItem(STORAGE_TRANSACTIONS);
+        return [];
+      }
+      return parsed;
+    }
+    return [];
   } catch {
-    return INITIAL_TRANSACTIONS;
+    return [];
   }
 }
 

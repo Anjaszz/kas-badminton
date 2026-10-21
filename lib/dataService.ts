@@ -182,6 +182,44 @@ export async function deleteTransaction(id: string): Promise<{ success: boolean;
   return { success: true };
 }
 
+// Update transaction
+export async function updateTransaction(tx: Transaction): Promise<{ success: boolean; data?: Transaction; error?: string }> {
+  const supabase = getSupabaseClient();
+  if (supabase) {
+    try {
+      const { data, error } = await supabase
+        .from('transactions')
+        .update({
+          type: tx.type,
+          amount: tx.amount,
+          category: tx.category,
+          description: tx.description || null,
+          member_id: tx.member_id || null,
+          member_name: tx.member_name || null,
+          week_label: tx.week_label || null,
+          weeks_count: tx.weeks_count || null,
+          date: tx.date,
+        })
+        .eq('id', tx.id)
+        .select()
+        .single();
+
+      if (!error && data) {
+        return { success: true, data: data as Transaction };
+      }
+      console.warn('Supabase update transaction error, updating locally:', error?.message);
+    } catch (err: unknown) {
+      console.warn('Supabase update transaction exception, updating locally:', err);
+    }
+  }
+
+  // Fallback / local
+  const current = getLocalTransactions();
+  const updated = current.map((t) => (t.id === tx.id ? tx : t));
+  saveLocalTransactions(updated);
+  return { success: true, data: tx };
+}
+
 // Migrate local data into Supabase
 export async function syncLocalDataToSupabase(): Promise<{ success: boolean; message: string }> {
   const supabase = getSupabaseClient();

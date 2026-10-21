@@ -3,11 +3,12 @@
 import React, { useState } from 'react';
 import { Transaction } from '../lib/types';
 import { formatRupiah, formatDateIndo } from '../lib/dataService';
-import { Search, ArrowDownRight, ArrowUpRight, Trash2, Filter } from 'lucide-react';
+import { Search, ArrowDownRight, ArrowUpRight, Trash2, Filter, ReceiptText, Pencil } from 'lucide-react';
 
 interface TransactionSectionProps {
   transactions: Transaction[];
   onDeleteTransaction: (id: string) => void;
+  onEditTransaction: (tx: Transaction) => void;
   onOpenIncome: () => void;
   onOpenExpense: () => void;
   isAdmin?: boolean;
@@ -16,6 +17,7 @@ interface TransactionSectionProps {
 export default function TransactionSection({
   transactions,
   onDeleteTransaction,
+  onEditTransaction,
   onOpenIncome,
   onOpenExpense,
   isAdmin = false,
@@ -125,7 +127,33 @@ export default function TransactionSection({
       </div>
 
       {/* Transaction List / Table */}
-      {filteredTransactions.length === 0 ? (
+      {transactions.length === 0 ? (
+        <div className="text-center py-16 px-4 bg-[#121217]/50 rounded-2xl border border-dashed border-zinc-800">
+          <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-[#22c55e] mx-auto flex items-center justify-center mb-3">
+            <ReceiptText className="w-6 h-6" />
+          </div>
+          <p className="text-white font-bold text-base mb-1">Belum Ada Riwayat Transaksi</p>
+          <p className="text-zinc-400 text-xs max-w-sm mx-auto mb-4">
+            Riwayat uang kas masuk dan pengeluaran club akan tercatat rapi di sini.
+          </p>
+          {isAdmin && (
+            <div className="flex items-center justify-center gap-3">
+              <button
+                onClick={onOpenIncome}
+                className="px-3.5 py-2 rounded-xl bg-red-600 text-white text-xs font-semibold hover:bg-red-500 shadow-md shadow-red-950/40"
+              >
+                + Catat Kas Masuk
+              </button>
+              <button
+                onClick={onOpenExpense}
+                className="px-3.5 py-2 rounded-xl bg-zinc-800 text-zinc-200 text-xs font-semibold hover:bg-zinc-700 border border-zinc-700"
+              >
+                - Catat Pengeluaran
+              </button>
+            </div>
+          )}
+        </div>
+      ) : filteredTransactions.length === 0 ? (
         <div className="text-center py-16 px-4 bg-[#121217]/50 rounded-2xl border border-dashed border-zinc-800">
           <p className="text-zinc-400 text-sm">Belum ada catatan riwayat transaksi yang cocok.</p>
           {isAdmin && (
@@ -235,13 +263,22 @@ export default function TransactionSection({
                     </div>
 
                     {isAdmin && (
-                      <button
-                        onClick={() => onDeleteTransaction(tx.id)}
-                        className="p-1.5 sm:p-2 rounded-xl text-zinc-500 hover:text-red-400 hover:bg-red-950/30 transition-colors"
-                        title="Hapus transaksi ini"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
+                      <div className="flex items-center gap-1">
+                        <button
+                          onClick={() => onEditTransaction(tx)}
+                          className="p-1.5 sm:p-2 rounded-xl text-zinc-400 hover:text-amber-400 hover:bg-amber-950/30 transition-colors"
+                          title="Edit catatan transaksi ini"
+                        >
+                          <Pencil className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => onDeleteTransaction(tx.id)}
+                          className="p-1.5 sm:p-2 rounded-xl text-zinc-500 hover:text-red-400 hover:bg-red-950/30 transition-colors"
+                          title="Hapus transaksi ini"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
                     )}
                   </div>
                 </div>

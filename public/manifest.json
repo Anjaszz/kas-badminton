@@ -1,0 +1,30 @@
+{
+  "name": "Kas Badminton Club",
+  "short_name": "Kas Badminton",
+  "description": "Aplikasi Pencatatan Kas & Iuran Mingguan Badminton Club",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0d",
+  "theme_color": "#0c0c10",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/logo-ax.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/logo-ax.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/logo-ax.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

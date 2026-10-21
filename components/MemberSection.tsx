@@ -104,7 +104,26 @@ export default function MemberSection({
       </div>
 
       {/* Grid of Members */}
-      {filteredMembers.length === 0 ? (
+      {summaries.length === 0 ? (
+        <div className="text-center py-16 px-4 bg-[#121217]/50 rounded-2xl border border-dashed border-zinc-800">
+          <div className="w-12 h-12 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-500 mx-auto flex items-center justify-center mb-3">
+            <UserPlus className="w-6 h-6" />
+          </div>
+          <p className="text-white font-bold text-base mb-1">Belum Ada Anggota Kas</p>
+          <p className="text-zinc-400 text-xs max-w-sm mx-auto mb-4">
+            Daftar anggota kas badminton masih kosong. Tambahkan anggota pertama untuk mulai mencatat iuran mingguan.
+          </p>
+          {isAdmin && (
+            <button
+              onClick={onOpenAddMember}
+              className="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs font-semibold shadow-md shadow-red-950/40 inline-flex items-center gap-1.5"
+            >
+              <UserPlus className="w-3.5 h-3.5" />
+              <span>Tambah Anggota Sekarang</span>
+            </button>
+          )}
+        </div>
+      ) : filteredMembers.length === 0 ? (
         <div className="text-center py-16 px-4 bg-[#121217]/50 rounded-2xl border border-dashed border-zinc-800">
           <p className="text-zinc-400 text-sm">Tidak ada anggota yang cocok dengan filter pencarian.</p>
         </div>

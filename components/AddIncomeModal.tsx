@@ -100,10 +100,10 @@ export default function AddIncomeModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="w-full max-w-lg bg-[#121217] border border-[#2a2a38] rounded-2xl shadow-2xl overflow-hidden">
+      <div className="w-full max-w-lg bg-[#121217] border border-[#2a2a38] rounded-2xl shadow-2xl relative">
         
         {/* Header */}
-        <div className="flex items-center justify-between p-5 border-b border-zinc-800 bg-[#16161f]">
+        <div className="flex items-center justify-between p-5 border-b border-zinc-800 bg-[#16161f] rounded-t-2xl">
           <div className="flex items-center gap-3">
             <div className="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-[#22c55e]">
               <ArrowDownRight className="w-5 h-5" />
