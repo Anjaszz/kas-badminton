@@ -22,20 +22,44 @@ export default function DatePicker({
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Parse initial date or fallback to today
-  const initialDate = value ? new Date(value + 'T00:00:00') : new Date();
-  const [viewYear, setViewYear] = useState(initialDate.getFullYear());
-  const [viewMonth, setViewMonth] = useState(initialDate.getMonth()); // 0-11
+  // Parse initial date or safe default
+  const [viewYear, setViewYear] = useState(() => {
+    if (value && value.includes('-')) {
+      const y = parseInt(value.split('-')[0], 10);
+      if (!isNaN(y)) return y;
+    }
+    return 2026;
+  });
+  const [viewMonth, setViewMonth] = useState(() => {
+    if (value && value.includes('-')) {
+      const m = parseInt(value.split('-')[1], 10) - 1;
+      if (!isNaN(m)) return m;
+    }
+    return 9;
+  });
+  const [todayInfo, setTodayInfo] = useState<{ y: number; m: number; d: number } | null>(null);
 
-  // Keep view in sync when value changes externally
+  // Keep view in sync when value changes or on client mount
   useEffect(() => {
-    if (value) {
-      const d = new Date(value + 'T00:00:00');
-      if (!isNaN(d.getTime())) {
-        setViewYear(d.getFullYear());
-        setViewMonth(d.getMonth());
+    const now = new Date();
+    setTodayInfo({
+      y: now.getFullYear(),
+      m: now.getMonth(),
+      d: now.getDate(),
+    });
+
+    if (value && value.includes('-')) {
+      const parts = value.split('-');
+      const y = parseInt(parts[0], 10);
+      const m = parseInt(parts[1], 10) - 1;
+      if (!isNaN(y) && !isNaN(m)) {
+        setViewYear(y);
+        setViewMonth(m);
+        return;
       }
     }
+    setViewYear(now.getFullYear());
+    setViewMonth(now.getMonth());
   }, [value]);
 
   // Close when clicking outside
@@ -107,11 +131,11 @@ export default function DatePicker({
   };
 
   const isToday = (day: number) => {
-    const now = new Date();
+    if (!todayInfo) return false;
     return (
-      now.getFullYear() === viewYear &&
-      now.getMonth() === viewMonth &&
-      now.getDate() === day
+      todayInfo.y === viewYear &&
+      todayInfo.m === viewMonth &&
+      todayInfo.d === day
     );
   };
 

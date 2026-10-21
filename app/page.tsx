@@ -66,8 +66,11 @@ export default function Home() {
   // Preselected member for fast payment
   const [preselectedMember, setPreselectedMember] = useState<Member | null>(null);
 
-  // Dynamic Current Week calculation (e.g., Minggu 3 - Oktober)
-  const defaultWeekLabel = useMemo(() => {
+  // Dynamic Current Week calculation (computed in useEffect to avoid prerender new Date() error)
+  const [currentWeekLabel, setCurrentWeekLabel] = useState<string>('Minggu Ini');
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  useEffect(() => {
     const now = new Date();
     const day = now.getDate();
     const weekNum = Math.min(4, Math.ceil(day / 7));
@@ -75,11 +78,8 @@ export default function Home() {
       'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
       'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember',
     ];
-    return `Minggu ${weekNum} - ${monthNames[now.getMonth()]}`;
+    setCurrentWeekLabel(`Minggu ${weekNum} - ${monthNames[now.getMonth()]}`);
   }, []);
-
-  const [currentWeekLabel, setCurrentWeekLabel] = useState<string>(defaultWeekLabel);
-  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -449,7 +449,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="border-t border-[#1a1a24] bg-[#0c0c10] py-6 text-center text-xs text-zinc-500">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p>© {new Date().getFullYear()} Kas Badminton Club • Dikelola oleh Tim Badminton</p>
+          <p>© 2026 Kas Badminton Club • Dikelola oleh Tim Badminton</p>
           <div className="flex items-center gap-4 text-zinc-400">
             <button
               onClick={() => setIsReportModalOpen(true)}

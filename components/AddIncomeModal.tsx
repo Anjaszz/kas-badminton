@@ -28,7 +28,7 @@ export default function AddIncomeModal({
   const [memberId, setMemberId] = useState('');
   const [weeksCount, setWeeksCount] = useState<number>(1);
   const [weekLabel, setWeekLabel] = useState(currentWeekLabel);
-  const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+  const [date, setDate] = useState('');
   const [description, setDescription] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -48,6 +48,7 @@ export default function AddIncomeModal({
     if (isOpen) {
       setWeeksCount(1);
       setDescription('');
+      setDate(new Date().toISOString().split('T')[0]);
     }
   }, [isOpen]);
 

@@ -33,7 +33,7 @@ export default function AddExpenseModal({
 }: AddExpenseModalProps) {
   const [category, setCategory] = useState('Sewa Lapangan');
   const [amount, setAmount] = useState('');
-  const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+  const [date, setDate] = useState('');
   const [description, setDescription] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
