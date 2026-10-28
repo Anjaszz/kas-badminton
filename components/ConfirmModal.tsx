@@ -27,21 +27,21 @@ export default function ConfirmModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-150">
-      <div className="w-full max-w-md bg-[#121217] border border-[#2a2a38] rounded-2xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-150">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 dark:bg-black/80 backdrop-blur-sm animate-in fade-in duration-150">
+      <div className="w-full max-w-md bg-white dark:bg-[#121217] border border-slate-200 dark:border-[#2a2a38] rounded-2xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-150">
         
         {/* Header */}
-        <div className="flex items-center justify-between p-5 border-b border-zinc-800 bg-[#16161f]">
+        <div className="flex items-center justify-between p-5 border-b border-slate-200 dark:border-zinc-800 bg-slate-50 dark:bg-[#16161f]">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-red-500/10 border border-red-500/20 text-red-500">
+            <div className="p-2.5 rounded-xl bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-500">
               <AlertTriangle className="w-5 h-5" />
             </div>
-            <h3 className="text-base font-bold text-white">{title}</h3>
+            <h3 className="text-base font-bold text-slate-900 dark:text-white">{title}</h3>
           </div>
           <button
             onClick={onClose}
             disabled={isLoading}
-            className="p-1.5 text-zinc-400 hover:text-white rounded-lg hover:bg-zinc-800 transition-colors"
+            className="p-1.5 text-slate-400 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white rounded-lg hover:bg-slate-200/70 dark:hover:bg-zinc-800 transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
@@ -49,11 +49,11 @@ export default function ConfirmModal({
 
         {/* Content */}
         <div className="p-6 space-y-4">
-          <p className="text-sm text-zinc-300 leading-relaxed">
+          <p className="text-sm text-slate-600 dark:text-zinc-300 leading-relaxed">
             {message}
           </p>
 
-          <div className="p-3 bg-red-950/20 border border-red-900/30 rounded-xl text-xs text-red-400 flex items-center gap-2">
+          <div className="p-3 bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/30 rounded-xl text-xs text-red-600 dark:text-red-400 flex items-center gap-2">
             <span>⚠️</span>
             <span>Data yang dihapus tidak dapat dipulihkan kembali.</span>
           </div>
@@ -64,7 +64,7 @@ export default function ConfirmModal({
               type="button"
               onClick={onClose}
               disabled={isLoading}
-              className="px-4 py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs sm:text-sm font-semibold transition-colors"
+              className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-slate-700 dark:text-zinc-300 text-xs sm:text-sm font-semibold transition-colors"
             >
               {cancelText}
             </button>
@@ -72,7 +72,7 @@ export default function ConfirmModal({
               type="button"
               onClick={onConfirm}
               disabled={isLoading}
-              className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs sm:text-sm font-semibold transition-all shadow-lg shadow-red-900/30 active:scale-95 disabled:opacity-50"
+              className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs sm:text-sm font-semibold transition-all shadow-md shadow-red-600/20 dark:shadow-lg dark:shadow-red-900/30 active:scale-95 disabled:opacity-50"
             >
               <Trash2 className="w-4 h-4" />
               <span>{isLoading ? 'Menghapus...' : confirmText}</span>

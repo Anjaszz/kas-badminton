@@ -13,7 +13,10 @@ const geistMono = Geist_Mono({
 });
 
 export const viewport: Viewport = {
-  themeColor: "#0c0c10",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0c0c10" },
+  ],
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
@@ -25,7 +28,7 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
-    statusBarStyle: "black-translucent",
+    statusBarStyle: "default",
     title: "Kas Badminton",
   },
   icons: {
@@ -43,9 +46,10 @@ export default function RootLayout({
   return (
     <html
       lang="id"
-      className={`${geistSans.variable} ${geistMono.variable} dark h-full antialiased`}
+      suppressHydrationWarning
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-[#0a0a0d] text-white selection:bg-red-600 selection:text-white">
+      <body className="min-h-full flex flex-col bg-slate-50 dark:bg-[#0a0a0d] text-slate-900 dark:text-white selection:bg-red-600 selection:text-white transition-colors duration-200">
         {children}
       </body>
     </html>

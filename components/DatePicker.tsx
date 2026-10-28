@@ -5,7 +5,7 @@ import { Calendar as CalendarIcon, ChevronLeft, ChevronRight } from 'lucide-reac
 import { formatDateIndo } from '../lib/dataService';
 
 interface DatePickerProps {
-  value: string; // Format: 'YYYY-MM-DD'
+  value: string;
   onChange: (date: string) => void;
   label?: string;
   placeholder?: string;
@@ -25,7 +25,6 @@ export default function DatePicker({
   const [placement, setPlacement] = useState<'down' | 'up'>('down');
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Parse initial date or safe default
   const [viewYear, setViewYear] = useState(() => {
     if (value && value.includes('-')) {
       const y = parseInt(value.split('-')[0], 10);
@@ -42,7 +41,6 @@ export default function DatePicker({
   });
   const [todayInfo, setTodayInfo] = useState<{ y: number; m: number; d: number } | null>(null);
 
-  // Keep view in sync when value changes or on client mount
   useEffect(() => {
     const now = new Date();
     setTodayInfo({
@@ -65,7 +63,6 @@ export default function DatePicker({
     setViewMonth(now.getMonth());
   }, [value]);
 
-  // Close when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
@@ -80,7 +77,6 @@ export default function DatePicker({
     };
   }, [isOpen]);
 
-  // Determine placement (open up vs down based on available space)
   useEffect(() => {
     if (isOpen && containerRef.current) {
       if (direction === 'up') {
@@ -93,7 +89,6 @@ export default function DatePicker({
       }
       const rect = containerRef.current.getBoundingClientRect();
       const spaceBelow = window.innerHeight - rect.bottom;
-      // If less than 350px below, flip upwards
       if (spaceBelow < 350) {
         setPlacement('up');
       } else {
@@ -127,11 +122,8 @@ export default function DatePicker({
     }
   };
 
-  // Generate days in month
   const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
   const firstDayIndex = new Date(viewYear, viewMonth, 1).getDay();
-
-  // Previous month trailing days
   const prevMonthDays = new Date(viewYear, viewMonth, 0).getDate();
 
   const handleSelectDate = (day: number) => {
@@ -142,7 +134,6 @@ export default function DatePicker({
     setIsOpen(false);
   };
 
-  // Quick shortcuts
   const setQuickDate = (offsetDays: number) => {
     const d = new Date();
     d.setDate(d.getDate() + offsetDays);
@@ -173,7 +164,7 @@ export default function DatePicker({
   return (
     <div className={`relative ${className}`} ref={containerRef}>
       {label && (
-        <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-1.5">
+        <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-zinc-400 mb-1.5">
           {label}
         </label>
       )}
@@ -182,17 +173,17 @@ export default function DatePicker({
       <button
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
-        className={`w-full flex items-center justify-between bg-[#0a0a0f] border border-zinc-700/80 hover:border-zinc-500 rounded-xl px-3.5 py-2.5 text-sm text-left transition-all ${
+        className={`w-full flex items-center justify-between bg-slate-50 dark:bg-[#0a0a0f] border border-slate-300 dark:border-zinc-700/80 hover:border-slate-400 dark:hover:border-zinc-500 rounded-xl px-3.5 py-2.5 text-sm text-left transition-all ${
           isOpen ? 'border-red-500 ring-1 ring-red-500/30' : ''
         }`}
       >
         <div className="flex items-center gap-2.5 truncate">
-          <CalendarIcon className="w-4 h-4 text-zinc-400 flex-shrink-0" />
-          <span className={value ? 'text-white font-medium' : 'text-zinc-500'}>
+          <CalendarIcon className="w-4 h-4 text-slate-400 dark:text-zinc-400 flex-shrink-0" />
+          <span className={value ? 'text-slate-900 dark:text-white font-medium' : 'text-slate-400 dark:text-zinc-500'}>
             {value ? formatDateIndo(value) : placeholder}
           </span>
         </div>
-        <span className="text-[10px] font-semibold text-zinc-400 bg-zinc-800/80 px-2 py-0.5 rounded border border-zinc-700">
+        <span className="text-[10px] font-semibold text-slate-500 dark:text-zinc-400 bg-white dark:bg-zinc-800/80 px-2 py-0.5 rounded border border-slate-200 dark:border-zinc-700">
           Pilih
         </span>
       </button>
@@ -200,32 +191,32 @@ export default function DatePicker({
       {/* Overlay Panel (Calendar Dropdown) */}
       {isOpen && (
         <div
-          className={`absolute left-0 z-50 w-72 sm:w-80 max-w-[calc(100vw-2.5rem)] bg-[#14141c] border border-[#2b2b3b] rounded-2xl p-3.5 sm:p-4 shadow-2xl animate-in fade-in zoom-in-95 duration-150 ${
+          className={`absolute left-0 z-50 w-72 sm:w-80 max-w-[calc(100vw-2.5rem)] bg-white dark:bg-[#14141c] border border-slate-200 dark:border-[#2b2b3b] rounded-2xl p-3.5 sm:p-4 shadow-2xl animate-in fade-in zoom-in-95 duration-150 ${
             placement === 'up'
-              ? 'bottom-full mb-2 shadow-[0_-12px_40px_rgba(0,0,0,0.9)]'
-              : 'top-full mt-2 shadow-[0_12px_40px_rgba(0,0,0,0.9)]'
+              ? 'bottom-full mb-2 shadow-[0_-12px_40px_rgba(15,23,42,0.18)] dark:shadow-[0_-12px_40px_rgba(0,0,0,0.9)]'
+              : 'top-full mt-2 shadow-[0_12px_40px_rgba(15,23,42,0.18)] dark:shadow-[0_12px_40px_rgba(0,0,0,0.9)]'
           }`}
         >
           
           {/* Calendar Header */}
-          <div className="flex items-center justify-between mb-3 pb-2 border-b border-zinc-800">
+          <div className="flex items-center justify-between mb-3 pb-2 border-b border-slate-200 dark:border-zinc-800">
             <button
               type="button"
               onClick={prevMonth}
-              className="p-1.5 rounded-lg bg-zinc-800/70 hover:bg-zinc-700 text-zinc-300 hover:text-white transition-colors"
+              className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-zinc-800/70 dark:hover:bg-zinc-700 text-slate-600 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white transition-colors"
               title="Bulan sebelumnya"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
 
-            <span className="text-sm font-bold text-white tracking-wide">
+            <span className="text-sm font-bold text-slate-900 dark:text-white tracking-wide">
               {monthNames[viewMonth]} {viewYear}
             </span>
 
             <button
               type="button"
               onClick={nextMonth}
-              className="p-1.5 rounded-lg bg-zinc-800/70 hover:bg-zinc-700 text-zinc-300 hover:text-white transition-colors"
+              className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-zinc-800/70 dark:hover:bg-zinc-700 text-slate-600 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white transition-colors"
               title="Bulan berikutnya"
             >
               <ChevronRight className="w-4 h-4" />
@@ -238,7 +229,7 @@ export default function DatePicker({
               <span
                 key={d}
                 className={`text-[11px] font-bold ${
-                  idx === 0 ? 'text-red-400' : 'text-zinc-500'
+                  idx === 0 ? 'text-red-500 dark:text-red-400' : 'text-slate-400 dark:text-zinc-500'
                 }`}
               >
                 {d}
@@ -248,20 +239,18 @@ export default function DatePicker({
 
           {/* Calendar Grid */}
           <div className="grid grid-cols-7 gap-1 text-center">
-            {/* Previous month empty days */}
             {Array.from({ length: firstDayIndex }).map((_, i) => {
               const dayNum = prevMonthDays - firstDayIndex + i + 1;
               return (
                 <div
                   key={`prev-${i}`}
-                  className="h-8 flex items-center justify-center text-xs text-zinc-600 select-none"
+                  className="h-8 flex items-center justify-center text-xs text-slate-300 dark:text-zinc-600 select-none"
                 >
                   {dayNum}
                 </div>
               );
             })}
 
-            {/* Current month days */}
             {Array.from({ length: daysInMonth }).map((_, i) => {
               const day = i + 1;
               const selected = isSelected(day);
@@ -274,10 +263,10 @@ export default function DatePicker({
                   onClick={() => handleSelectDate(day)}
                   className={`h-8 w-8 mx-auto rounded-xl flex items-center justify-center text-xs font-medium transition-all ${
                     selected
-                      ? 'bg-red-600 text-white font-bold shadow-md shadow-red-900/50 scale-105'
+                      ? 'bg-red-600 text-white font-bold shadow-md shadow-red-600/30 dark:shadow-red-900/50 scale-105'
                       : today
-                      ? 'bg-zinc-800 border border-emerald-500 text-emerald-400 font-bold hover:bg-zinc-700'
-                      : 'text-zinc-200 hover:bg-zinc-800 hover:text-white'
+                      ? 'bg-emerald-50 dark:bg-zinc-800 border border-emerald-500 text-emerald-700 dark:text-emerald-400 font-bold hover:bg-emerald-100 dark:hover:bg-zinc-700'
+                      : 'text-slate-700 dark:text-zinc-200 hover:bg-slate-100 dark:hover:bg-zinc-800 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
                   {day}
@@ -287,25 +276,25 @@ export default function DatePicker({
           </div>
 
           {/* Quick Shortcuts Footer */}
-          <div className="mt-3 pt-3 border-t border-zinc-800 flex items-center justify-between text-xs">
+          <div className="mt-3 pt-3 border-t border-slate-200 dark:border-zinc-800 flex items-center justify-between text-xs">
             <button
               type="button"
               onClick={() => setQuickDate(-7)}
-              className="text-zinc-400 hover:text-white px-2 py-1 rounded hover:bg-zinc-800 transition-colors"
+              className="text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white px-2 py-1 rounded hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors"
             >
               -1 Minggu
             </button>
             <button
               type="button"
               onClick={() => setQuickDate(-1)}
-              className="text-zinc-400 hover:text-white px-2 py-1 rounded hover:bg-zinc-800 transition-colors"
+              className="text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white px-2 py-1 rounded hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors"
             >
               Kemarin
             </button>
             <button
               type="button"
               onClick={() => setQuickDate(0)}
-              className="text-emerald-400 font-semibold hover:text-emerald-300 px-2 py-1 rounded hover:bg-zinc-800 transition-colors"
+              className="text-emerald-600 dark:text-emerald-400 font-semibold hover:text-emerald-500 dark:hover:text-emerald-300 px-2 py-1 rounded hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors"
             >
               Hari Ini
             </button>
