@@ -13,7 +13,8 @@ import ConfirmModal from '../components/ConfirmModal';
 import LoginModal from '../components/LoginModal';
 import PWAInstallBanner from '../components/PWAInstallBanner';
 import EditTransactionModal from '../components/EditTransactionModal';
-import { StatCardsSkeleton, MemberSectionSkeleton, TransactionSectionSkeleton } from '../components/DashboardSkeleton';
+import MonthlySummarySection from '../components/MonthlySummarySection';
+import { StatCardsSkeleton, MemberSectionSkeleton, TransactionSectionSkeleton, SummarySectionSkeleton } from '../components/DashboardSkeleton';
 
 import { Member, Transaction, MemberSummary } from '../lib/types';
 import {
@@ -27,14 +28,14 @@ import {
   formatRupiah,
 } from '../lib/dataService';
 import { getSupabaseCredentials } from '../lib/supabase';
-import { Users, ReceiptText, CheckCircle, Coins, Edit3 } from 'lucide-react';
+import { Users, ReceiptText, CheckCircle, Coins, Edit3, BarChart3 } from 'lucide-react';
 
 export default function Home() {
   const [members, setMembers] = useState<Member[]>([]);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSupabaseConnected, setIsSupabaseConnected] = useState(false);
-  const [activeTab, setActiveTab] = useState<'members' | 'transactions'>('members');
+  const [activeTab, setActiveTab] = useState<'members' | 'transactions' | 'summary'>('members');
 
   // Theme State (Default: 'light')
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
@@ -391,11 +392,11 @@ export default function Home() {
           />
         )}
 
-        {/* Navigation Tabs (Anggota vs Riwayat Kas) */}
+        {/* Navigation Tabs (Anggota vs Riwayat Kas vs Summary) */}
         <div className="border-b border-slate-200 dark:border-zinc-800 flex items-center gap-3 sm:gap-6 pt-2 overflow-x-auto">
           <button
             onClick={() => setActiveTab('members')}
-            className={`pb-3 text-sm font-bold flex items-center gap-2 transition-all border-b-2 ${
+            className={`pb-3 text-sm font-bold flex items-center gap-2 transition-all border-b-2 whitespace-nowrap ${
               activeTab === 'members'
                 ? 'border-red-600 dark:border-red-500 text-slate-950 dark:text-white'
                 : 'border-transparent text-slate-700 dark:text-zinc-500 hover:text-slate-950 dark:hover:text-zinc-300'
@@ -407,7 +408,7 @@ export default function Home() {
 
           <button
             onClick={() => setActiveTab('transactions')}
-            className={`pb-3 text-sm font-bold flex items-center gap-2 transition-all border-b-2 ${
+            className={`pb-3 text-sm font-bold flex items-center gap-2 transition-all border-b-2 whitespace-nowrap ${
               activeTab === 'transactions'
                 ? 'border-red-600 dark:border-red-500 text-slate-950 dark:text-white'
                 : 'border-transparent text-slate-700 dark:text-zinc-500 hover:text-slate-950 dark:hover:text-zinc-300'
@@ -416,14 +417,28 @@ export default function Home() {
             <ReceiptText className="w-4 h-4" />
             <span>Riwayat Kas ({transactions.length})</span>
           </button>
+
+          <button
+            onClick={() => setActiveTab('summary')}
+            className={`pb-3 text-sm font-bold flex items-center gap-2 transition-all border-b-2 whitespace-nowrap ${
+              activeTab === 'summary'
+                ? 'border-red-600 dark:border-red-500 text-slate-950 dark:text-white'
+                : 'border-transparent text-slate-700 dark:text-zinc-500 hover:text-slate-950 dark:hover:text-zinc-300'
+            }`}
+          >
+            <BarChart3 className="w-4 h-4" />
+            <span>Summary Bulanan</span>
+          </button>
         </div>
 
         {/* Tab Content */}
         {isLoading ? (
           activeTab === 'members' ? (
             <MemberSectionSkeleton />
-          ) : (
+          ) : activeTab === 'transactions' ? (
             <TransactionSectionSkeleton />
+          ) : (
+            <SummarySectionSkeleton />
           )
         ) : activeTab === 'members' ? (
           <MemberSection
@@ -433,7 +448,7 @@ export default function Home() {
             onDeleteMember={handleDeleteMember}
             isAdmin={isAdmin}
           />
-        ) : (
+        ) : activeTab === 'transactions' ? (
           <TransactionSection
             transactions={transactions}
             onDeleteTransaction={handleDeleteTransaction}
@@ -445,6 +460,8 @@ export default function Home() {
             onOpenExpense={() => setIsExpenseModalOpen(true)}
             isAdmin={isAdmin}
           />
+        ) : (
+          <MonthlySummarySection transactions={transactions} />
         )}
 
       </main>

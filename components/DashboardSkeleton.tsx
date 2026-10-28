@@ -102,3 +102,25 @@ export function TransactionSectionSkeleton() {
     </div>
   );
 }
+
+export function SummarySectionSkeleton() {
+  return (
+    <div className="space-y-6 animate-pulse">
+      {/* Top Filter Bar Skeleton */}
+      <div className="flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between bg-white dark:bg-[#121217] p-4 rounded-2xl border border-slate-200 dark:border-[#22222d]">
+        <div className="h-10 bg-slate-200 dark:bg-zinc-800 rounded-xl w-full md:w-80"></div>
+        <div className="h-10 bg-slate-200 dark:bg-zinc-800 rounded-xl w-36"></div>
+      </div>
+
+      {/* Table Skeleton */}
+      <div className="bg-white dark:bg-[#121217] rounded-2xl border border-slate-200 dark:border-[#22222d] p-5 space-y-4">
+        <div className="h-5 w-52 bg-slate-200 dark:bg-zinc-800 rounded"></div>
+        <div className="space-y-3 pt-2">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="h-12 bg-slate-100 dark:bg-zinc-800/50 rounded-xl"></div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
