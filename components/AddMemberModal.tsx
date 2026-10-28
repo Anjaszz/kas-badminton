@@ -64,13 +64,13 @@ export default function AddMemberModal({
               <UserPlus className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-slate-900 dark:text-white">Tambah Anggota Badminton</h3>
-              <p className="text-xs text-slate-500 dark:text-zinc-400">Daftarkan orang baru untuk pencatatan uang kas</p>
+              <h3 className="text-lg font-bold text-slate-950 dark:text-white">Tambah Anggota Badminton</h3>
+              <p className="text-xs text-slate-700 dark:text-zinc-400 font-medium">Daftarkan orang baru untuk pencatatan uang kas</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-2 text-slate-400 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white rounded-lg hover:bg-slate-200/70 dark:hover:bg-zinc-800 transition-colors"
+            className="p-2 text-slate-600 dark:text-zinc-400 hover:text-slate-950 dark:hover:text-white rounded-lg hover:bg-slate-200/70 dark:hover:bg-zinc-800 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -81,7 +81,7 @@ export default function AddMemberModal({
           
           {/* Nama Anggota */}
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-zinc-400 mb-1.5">
+            <label className="block text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-zinc-400 mb-1.5">
               Nama Lengkap / Panggilan
             </label>
             <input
@@ -90,14 +90,14 @@ export default function AddMemberModal({
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              className="w-full bg-slate-50 dark:bg-[#0a0a0f] border border-slate-300 dark:border-zinc-700/80 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-red-500 placeholder-slate-400 dark:placeholder-zinc-500"
+              className="w-full bg-slate-50 dark:bg-[#0a0a0f] border border-slate-300 dark:border-zinc-700/80 rounded-xl px-3.5 py-2.5 text-sm text-slate-950 dark:text-white focus:outline-none focus:border-red-500 placeholder-slate-500 dark:placeholder-zinc-500"
             />
           </div>
 
           {/* Warna Avatar */}
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-zinc-400 mb-2 flex items-center gap-1.5">
-              <Palette className="w-3.5 h-3.5 text-slate-400 dark:text-zinc-400" />
+            <label className="block text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-zinc-400 mb-2 flex items-center gap-1.5">
+              <Palette className="w-3.5 h-3.5 text-slate-700 dark:text-zinc-400" />
               <span>Warna Profil Avatar</span>
             </label>
             <div className="flex items-center gap-2.5">
@@ -122,7 +122,7 @@ export default function AddMemberModal({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-slate-700 dark:text-zinc-300 text-xs sm:text-sm font-semibold transition-colors"
+              className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-slate-800 dark:text-zinc-300 text-xs sm:text-sm font-semibold transition-colors"
             >
               Batal
             </button>

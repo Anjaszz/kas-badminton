@@ -59,18 +59,18 @@ export default function LoginModal({
               <Lock className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+              <h3 className="text-base font-bold text-slate-950 dark:text-white flex items-center gap-1.5">
                 <span>Login Admin Kas</span>
                 <span className="text-[10px] uppercase font-bold px-1.5 py-0.5 rounded bg-red-50 dark:bg-red-950/80 border border-red-200 dark:border-red-600/40 text-red-600 dark:text-red-400">
                   AX
                 </span>
               </h3>
-              <p className="text-xs text-slate-500 dark:text-zinc-400">Masuk untuk mengelola data kas & anggota</p>
+              <p className="text-xs text-slate-700 dark:text-zinc-400 font-medium">Masuk untuk mengelola data kas & anggota</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 text-slate-400 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white rounded-lg hover:bg-slate-200/70 dark:hover:bg-zinc-800 transition-colors"
+            className="p-1.5 text-slate-600 dark:text-zinc-400 hover:text-slate-950 dark:hover:text-white rounded-lg hover:bg-slate-200/70 dark:hover:bg-zinc-800 transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
@@ -89,7 +89,7 @@ export default function LoginModal({
 
           {/* Email Input */}
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-zinc-400 mb-1.5 flex items-center gap-1.5">
+            <label className="block text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-zinc-400 mb-1.5 flex items-center gap-1.5">
               <Mail className="w-3.5 h-3.5 text-red-500 dark:text-red-400" />
               <span>Email Admin</span>
             </label>
@@ -103,13 +103,13 @@ export default function LoginModal({
                 setEmail(e.target.value);
                 setErrorMessage(null);
               }}
-              className="w-full bg-slate-50 dark:bg-[#0a0a0f] border border-slate-300 dark:border-zinc-700/80 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-red-500 placeholder-slate-400 dark:placeholder-zinc-500"
+              className="w-full bg-slate-50 dark:bg-[#0a0a0f] border border-slate-300 dark:border-zinc-700/80 rounded-xl px-3.5 py-2.5 text-sm text-slate-950 dark:text-white focus:outline-none focus:border-red-500 placeholder-slate-500 dark:placeholder-zinc-500"
             />
           </div>
 
           {/* Password Input */}
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-zinc-400 mb-1.5 flex items-center gap-1.5">
+            <label className="block text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-zinc-400 mb-1.5 flex items-center gap-1.5">
               <Lock className="w-3.5 h-3.5 text-red-500 dark:text-red-400" />
               <span>Kata Sandi (Password)</span>
             </label>
@@ -123,12 +123,12 @@ export default function LoginModal({
                   setPassword(e.target.value);
                   setErrorMessage(null);
                 }}
-                className="w-full bg-slate-50 dark:bg-[#0a0a0f] border border-slate-300 dark:border-zinc-700/80 rounded-xl pl-3.5 pr-10 py-2.5 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-red-500 placeholder-slate-400 dark:placeholder-zinc-500"
+                className="w-full bg-slate-50 dark:bg-[#0a0a0f] border border-slate-300 dark:border-zinc-700/80 rounded-xl pl-3.5 pr-10 py-2.5 text-sm text-slate-950 dark:text-white focus:outline-none focus:border-red-500 placeholder-slate-500 dark:placeholder-zinc-500"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white transition-colors"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-600 dark:text-zinc-400 hover:text-slate-950 dark:hover:text-white transition-colors"
               >
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
@@ -141,7 +141,7 @@ export default function LoginModal({
               type="button"
               onClick={onClose}
               disabled={isLoading}
-              className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-slate-700 dark:text-zinc-300 text-xs sm:text-sm font-semibold transition-colors"
+              className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-slate-800 dark:text-zinc-300 text-xs sm:text-sm font-semibold transition-colors"
             >
               Batal
             </button>

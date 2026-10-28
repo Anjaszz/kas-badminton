@@ -113,13 +113,13 @@ export default function AddExpenseModal({
               <ArrowUpRight className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-slate-900 dark:text-white">Catat Pengeluaran Kas</h3>
-              <p className="text-xs text-slate-500 dark:text-zinc-400">Biaya sewa lapangan, shuttlecock, minum, dll.</p>
+              <h3 className="text-lg font-bold text-slate-950 dark:text-white">Catat Pengeluaran Kas</h3>
+              <p className="text-xs text-slate-700 dark:text-zinc-400 font-medium">Biaya sewa lapangan, shuttlecock, minum, dll.</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-2 text-slate-400 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white rounded-lg hover:bg-slate-200/70 dark:hover:bg-zinc-800 transition-colors"
+            className="p-2 text-slate-600 dark:text-zinc-400 hover:text-slate-950 dark:hover:text-white rounded-lg hover:bg-slate-200/70 dark:hover:bg-zinc-800 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -128,12 +128,12 @@ export default function AddExpenseModal({
         {/* Info Saldo Kas Saat Ini */}
         <div className={`px-6 py-3 border-b flex items-center justify-between transition-colors ${
           isZeroBalance
-            ? 'bg-red-50 dark:bg-red-950/40 border-red-200 dark:border-red-900/50 text-red-600 dark:text-red-400'
-            : 'bg-slate-50 dark:bg-[#0e0e14] border-slate-200 dark:border-zinc-800/80 text-slate-700 dark:text-zinc-300'
+            ? 'bg-red-50 dark:bg-red-950/40 border-red-200 dark:border-red-900/50 text-red-700 dark:text-red-400'
+            : 'bg-slate-50 dark:bg-[#0e0e14] border-slate-200 dark:border-zinc-800/80 text-slate-800 dark:text-zinc-300'
         }`}>
           <div className="flex items-center gap-2 text-xs">
             <Wallet className={`w-4 h-4 ${isZeroBalance ? 'text-red-600 dark:text-red-400' : 'text-emerald-600 dark:text-emerald-400'}`} />
-            <span className="text-slate-500 dark:text-zinc-400">Sisa Saldo Kas Tersedia:</span>
+            <span className="text-slate-800 dark:text-zinc-400 font-medium">Sisa Saldo Kas Tersedia:</span>
           </div>
           <span className={`text-sm font-bold ${isZeroBalance ? 'text-red-600 dark:text-red-400' : 'text-emerald-600 dark:text-[#22c55e]'}`}>
             {formatRupiah(currentBalance)}
@@ -145,11 +145,11 @@ export default function AddExpenseModal({
 
           {/* Warning Banner jika saldo 0 */}
           {isZeroBalance && (
-            <div className="p-3 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800/70 rounded-xl text-xs text-red-700 dark:text-red-300 flex items-start gap-2.5 leading-relaxed">
+            <div className="p-3 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800/70 rounded-xl text-xs text-red-800 dark:text-red-300 flex items-start gap-2.5 leading-relaxed">
               <AlertTriangle className="w-4 h-4 text-red-600 dark:text-red-400 shrink-0 mt-0.5" />
               <div>
-                <p className="font-semibold text-red-800 dark:text-red-200">Saldo Kas Kosong (Rp 0)</p>
-                <p className="text-red-600/90 dark:text-red-300/80 mt-0.5">
+                <p className="font-bold text-red-900 dark:text-red-200">Saldo Kas Kosong (Rp 0)</p>
+                <p className="text-red-700 dark:text-red-300/80 mt-0.5">
                   Anda tidak bisa mencatat pengeluaran karena belum ada saldo kas. Silakan catat uang iuran kas masuk terlebih dahulu.
                 </p>
               </div>
@@ -158,7 +158,7 @@ export default function AddExpenseModal({
 
           {/* Error Message jika validasi gagal */}
           {errorMessage && !isZeroBalance && (
-            <div className="p-3 bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-700/80 rounded-xl text-xs text-red-700 dark:text-red-200 flex items-start gap-2.5 leading-relaxed">
+            <div className="p-3 bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-700/80 rounded-xl text-xs text-red-800 dark:text-red-200 flex items-start gap-2.5 leading-relaxed">
               <AlertTriangle className="w-4 h-4 text-red-600 dark:text-red-400 shrink-0 mt-0.5" />
               <span>{errorMessage}</span>
             </div>
@@ -166,7 +166,7 @@ export default function AddExpenseModal({
           
           {/* Kategori Pengeluaran */}
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-zinc-400 mb-1.5 flex items-center gap-1.5">
+            <label className="block text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-zinc-400 mb-1.5 flex items-center gap-1.5">
               <Tag className="w-3.5 h-3.5 text-red-500 dark:text-red-400" />
               <span>Kategori Pengeluaran</span>
             </label>
@@ -176,10 +176,10 @@ export default function AddExpenseModal({
                   type="button"
                   key={cat}
                   onClick={() => setCategory(cat)}
-                  className={`py-2 px-2.5 rounded-xl text-xs font-medium border text-left truncate transition-all ${
+                  className={`py-2 px-2.5 rounded-xl text-xs font-semibold border text-left truncate transition-all ${
                     category === cat
-                      ? 'bg-red-50 dark:bg-red-950/70 border-red-500 text-red-700 dark:text-red-300 shadow-[0_0_12px_rgba(239,68,68,0.15)]'
-                      : 'bg-slate-50 dark:bg-[#0a0a0f] border-slate-200 dark:border-zinc-800 text-slate-700 dark:text-zinc-300 hover:border-slate-300 dark:hover:border-zinc-700'
+                      ? 'bg-red-50 dark:bg-red-950/70 border-red-500 text-red-800 dark:text-red-300 shadow-[0_0_12px_rgba(239,68,68,0.15)]'
+                      : 'bg-slate-50 dark:bg-[#0a0a0f] border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-300 hover:border-slate-300 dark:hover:border-zinc-700'
                   }`}
                 >
                   {cat}
@@ -199,13 +199,13 @@ export default function AddExpenseModal({
           {/* Nominal Pengeluaran */}
           <div>
             <div className="flex items-center justify-between mb-1.5">
-              <label className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-zinc-400 flex items-center gap-1.5">
+              <label className="text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-zinc-400 flex items-center gap-1.5">
                 <DollarSign className="w-3.5 h-3.5 text-red-500 dark:text-red-400" />
                 <span>Nominal Pengeluaran</span>
               </label>
               {currentBalance > 0 && (
-                <span className="text-[11px] text-slate-500 dark:text-zinc-400">
-                  Maks: <span className="text-emerald-600 dark:text-emerald-400 font-semibold">{formatRupiah(currentBalance)}</span>
+                <span className="text-[11px] text-slate-700 dark:text-zinc-400 font-medium">
+                  Maks: <span className="text-emerald-600 dark:text-emerald-400 font-bold">{formatRupiah(currentBalance)}</span>
                 </span>
               )}
             </div>
@@ -226,10 +226,10 @@ export default function AddExpenseModal({
                     }}
                     className={`py-1.5 px-2 rounded-xl text-xs font-semibold border transition-all ${
                       disabled
-                        ? 'opacity-40 bg-slate-100 dark:bg-[#0a0a0f] border-slate-200 dark:border-zinc-900 text-slate-400 dark:text-zinc-600 cursor-not-allowed'
+                        ? 'opacity-40 bg-slate-100 dark:bg-[#0a0a0f] border-slate-200 dark:border-zinc-900 text-slate-500 dark:text-zinc-600 cursor-not-allowed'
                         : amount === formattedPill
-                        ? 'bg-red-50 dark:bg-red-950 border-red-500 text-red-700 dark:text-red-300 shadow-sm'
-                        : 'bg-slate-50 dark:bg-[#0a0a0f] border-slate-200 dark:border-zinc-800 text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:border-slate-300 dark:hover:border-zinc-700'
+                        ? 'bg-red-50 dark:bg-red-950 border-red-500 text-red-800 dark:text-red-300 shadow-sm'
+                        : 'bg-slate-50 dark:bg-[#0a0a0f] border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-400 hover:text-black dark:hover:text-white hover:border-slate-300 dark:hover:border-zinc-700'
                     }`}
                   >
                     Rp {formattedPill}
@@ -239,7 +239,7 @@ export default function AddExpenseModal({
             </div>
 
             <div className="relative">
-              <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-sm font-semibold text-slate-400 dark:text-zinc-400 pointer-events-none">
+              <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-sm font-bold text-slate-700 dark:text-zinc-400 pointer-events-none">
                 Rp
               </div>
               <input
@@ -254,7 +254,7 @@ export default function AddExpenseModal({
                   setErrorMessage(null);
                 }}
                 required
-                className={`w-full bg-slate-50 dark:bg-[#0a0a0f] border rounded-xl pl-10 pr-3.5 py-2.5 text-sm text-slate-900 dark:text-white font-semibold focus:outline-none placeholder-slate-400 dark:placeholder-zinc-500 ${
+                className={`w-full bg-slate-50 dark:bg-[#0a0a0f] border rounded-xl pl-10 pr-3.5 py-2.5 text-sm text-slate-950 dark:text-white font-semibold focus:outline-none placeholder-slate-500 dark:placeholder-zinc-500 ${
                   isExceedingBalance && !isZeroBalance
                     ? 'border-red-500 focus:border-red-400'
                     : 'border-slate-300 dark:border-zinc-700/80 focus:border-red-500'
@@ -272,7 +272,7 @@ export default function AddExpenseModal({
 
           {/* Rincian / Deskripsi */}
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-zinc-400 mb-1.5">
+            <label className="block text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-zinc-400 mb-1.5">
               Keterangan Rinci
             </label>
             <textarea
@@ -280,7 +280,7 @@ export default function AddExpenseModal({
               placeholder="Contoh: Lapangan 2 GOR Badminton (Pk 19.00 - 21.00)"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full bg-slate-50 dark:bg-[#0a0a0f] border border-slate-300 dark:border-zinc-700/80 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-red-500 placeholder-slate-400 dark:placeholder-zinc-500 resize-none"
+              className="w-full bg-slate-50 dark:bg-[#0a0a0f] border border-slate-300 dark:border-zinc-700/80 rounded-xl px-3.5 py-2.5 text-sm text-slate-950 dark:text-white focus:outline-none focus:border-red-500 placeholder-slate-500 dark:placeholder-zinc-500 resize-none"
             />
           </div>
 
@@ -289,7 +289,7 @@ export default function AddExpenseModal({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-slate-700 dark:text-zinc-300 text-xs sm:text-sm font-semibold transition-colors"
+              className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-slate-800 dark:text-zinc-300 text-xs sm:text-sm font-semibold transition-colors"
             >
               Batal
             </button>

@@ -42,7 +42,6 @@ export default function EditTransactionModal({
   const [description, setDescription] = useState('');
   const [memberId, setMemberId] = useState('');
   const [memberName, setMemberName] = useState('');
-  const [weekLabel, setWeekLabel] = useState('');
   const [weeksCount, setWeeksCount] = useState<number>(1);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -55,7 +54,6 @@ export default function EditTransactionModal({
       setDescription(transaction.description || '');
       setMemberId(transaction.member_id || '');
       setMemberName(transaction.member_name || '');
-      setWeekLabel(transaction.week_label || '');
       setWeeksCount(transaction.weeks_count || 1);
       setErrorMessage(null);
     }
@@ -119,7 +117,7 @@ export default function EditTransactionModal({
         description: description || category,
         member_id: isIncome ? memberId || null : null,
         member_name: isIncome ? memberName || null : null,
-        week_label: isIncome ? weekLabel || null : null,
+        week_label: null,
         weeks_count: isIncome ? weeksCount || undefined : undefined,
       });
       onClose();
@@ -151,26 +149,26 @@ export default function EditTransactionModal({
               <Edit className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <h3 className="text-lg font-bold text-slate-950 dark:text-white flex items-center gap-2">
                 <span>Edit Catatan {isIncome ? 'Kas Masuk' : 'Pengeluaran'}</span>
                 <span
                   className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full border ${
                     isIncome
-                      ? 'bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-600/40'
-                      : 'bg-red-50 dark:bg-red-950 text-red-700 dark:text-red-400 border-red-200 dark:border-red-600/40'
+                      ? 'bg-emerald-50 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-400 border-emerald-200 dark:border-emerald-600/40'
+                      : 'bg-red-50 dark:bg-red-950 text-red-800 dark:text-red-400 border-red-200 dark:border-red-600/40'
                   }`}
                 >
                   {isIncome ? 'Iuran' : 'Pengeluaran'}
                 </span>
               </h3>
-              <p className="text-xs text-slate-500 dark:text-zinc-400">
+              <p className="text-xs text-slate-700 dark:text-zinc-400 font-medium">
                 Perbaiki kesalahan nominal, tanggal, anggota, atau keterangan
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 text-slate-400 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white rounded-lg hover:bg-slate-200/70 dark:hover:bg-zinc-800 transition-colors"
+            className="p-1.5 text-slate-600 dark:text-zinc-400 hover:text-slate-950 dark:hover:text-white rounded-lg hover:bg-slate-200/70 dark:hover:bg-zinc-800 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -179,7 +177,7 @@ export default function EditTransactionModal({
         {/* Info Box untuk Expense: Sisa Saldo Tersedia */}
         {!isIncome && (
           <div className="px-6 py-2.5 bg-slate-50 dark:bg-[#0e0e14] border-b border-slate-200 dark:border-zinc-800/80 flex items-center justify-between text-xs">
-            <span className="text-slate-500 dark:text-zinc-400 flex items-center gap-1.5">
+            <span className="text-slate-800 dark:text-zinc-400 font-medium flex items-center gap-1.5">
               <Wallet className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
               Batas Maksimal Pengeluaran:
             </span>
@@ -192,7 +190,7 @@ export default function EditTransactionModal({
           
           {/* Error Banner */}
           {errorMessage && (
-            <div className="p-3 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800/80 rounded-xl text-xs text-red-700 dark:text-red-200 flex items-start gap-2.5 leading-relaxed">
+            <div className="p-3 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800/80 rounded-xl text-xs text-red-800 dark:text-red-200 flex items-start gap-2.5 leading-relaxed">
               <AlertTriangle className="w-4 h-4 text-red-600 dark:text-red-400 shrink-0 mt-0.5" />
               <span>{errorMessage}</span>
             </div>
@@ -201,54 +199,41 @@ export default function EditTransactionModal({
           {/* Form Fields: Kas Masuk */}
           {isIncome ? (
             <>
-              {/* Nama Anggota */}
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-zinc-400 mb-1.5 flex items-center gap-1.5">
-                  <User className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                  <span>Nama Anggota</span>
-                </label>
-                <div className="relative">
-                  <select
-                    value={memberId}
-                    onChange={(e) => handleMemberChange(e.target.value)}
-                    required
-                    className="w-full bg-slate-50 dark:bg-[#0a0a0f] border border-slate-300 dark:border-zinc-700/80 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-red-500"
-                  >
-                    <option value="" disabled>Pilih nama anggota...</option>
-                    {members.map((m) => (
-                      <option key={m.id} value={m.id}>
-                        {m.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              {/* Tanggal & Sesi Minggu */}
+              {/* Nama Anggota & Tanggal */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-zinc-400 mb-1.5 flex items-center gap-1.5">
+                    <User className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                    <span>Nama Anggota</span>
+                  </label>
+                  <div className="relative">
+                    <select
+                      value={memberId}
+                      onChange={(e) => handleMemberChange(e.target.value)}
+                      required
+                      className="w-full bg-slate-50 dark:bg-[#0a0a0f] border border-slate-300 dark:border-zinc-700/80 rounded-xl px-3.5 py-2.5 text-sm text-slate-950 dark:text-white font-medium focus:outline-none focus:border-red-500"
+                    >
+                      <option value="" disabled>Pilih nama anggota...</option>
+                      {members.map((m) => (
+                        <option key={m.id} value={m.id}>
+                          {m.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
                 <DatePicker
                   label="Tanggal Transaksi"
                   value={date}
                   onChange={setDate}
                   direction="auto"
                 />
-                <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-zinc-400 mb-1.5">
-                    Sesi / Label Minggu
-                  </label>
-                  <input
-                    type="text"
-                    value={weekLabel}
-                    onChange={(e) => setWeekLabel(e.target.value)}
-                    placeholder="Contoh: Minggu 3 - Oktober"
-                    className="w-full bg-slate-50 dark:bg-[#0a0a0f] border border-slate-300 dark:border-zinc-700/80 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-red-500"
-                  />
-                </div>
               </div>
 
-              {/* Pilihan Berapa Minggu Lunas */}
+              {/* Pilihan Berapa Minggu Dibayar */}
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-zinc-400 mb-1.5">
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-zinc-400 mb-1.5">
                   Jumlah Minggu Dibayar
                 </label>
                 <div className="grid grid-cols-4 sm:grid-cols-6 gap-1.5 mb-2">
@@ -259,8 +244,8 @@ export default function EditTransactionModal({
                       onClick={() => handleWeeksCountChange(w)}
                       className={`py-1.5 rounded-xl text-xs font-bold border transition-all ${
                         weeksCount === w
-                          ? 'bg-emerald-50 dark:bg-emerald-950 border-emerald-500 text-emerald-700 dark:text-emerald-400'
-                          : 'bg-slate-50 dark:bg-[#0a0a0f] border-slate-200 dark:border-zinc-800 text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white'
+                          ? 'bg-emerald-50 dark:bg-emerald-950 border-emerald-500 text-emerald-800 dark:text-emerald-400'
+                          : 'bg-slate-50 dark:bg-[#0a0a0f] border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-400 hover:text-black dark:hover:text-white'
                       }`}
                     >
                       {w} Mgg
@@ -271,12 +256,12 @@ export default function EditTransactionModal({
 
               {/* Nominal Kas Masuk */}
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-zinc-400 mb-1.5 flex items-center gap-1.5">
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-zinc-400 mb-1.5 flex items-center gap-1.5">
                   <DollarSign className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                   <span>Nominal Kas Masuk (Rp)</span>
                 </label>
                 <div className="relative">
-                  <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-sm font-semibold text-slate-400 dark:text-zinc-400 pointer-events-none">
+                  <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-sm font-bold text-slate-700 dark:text-zinc-400 pointer-events-none">
                     Rp
                   </div>
                   <input
@@ -288,7 +273,7 @@ export default function EditTransactionModal({
                       setErrorMessage(null);
                     }}
                     required
-                    className="w-full bg-slate-50 dark:bg-[#0a0a0f] border border-slate-300 dark:border-zinc-700/80 rounded-xl pl-10 pr-3.5 py-2.5 text-sm text-slate-900 dark:text-white font-semibold focus:outline-none focus:border-emerald-500"
+                    className="w-full bg-slate-50 dark:bg-[#0a0a0f] border border-slate-300 dark:border-zinc-700/80 rounded-xl pl-10 pr-3.5 py-2.5 text-sm text-slate-950 dark:text-white font-semibold focus:outline-none focus:border-emerald-500"
                   />
                 </div>
               </div>
@@ -298,7 +283,7 @@ export default function EditTransactionModal({
             <>
               {/* Kategori Pengeluaran */}
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-zinc-400 mb-1.5 flex items-center gap-1.5">
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-zinc-400 mb-1.5 flex items-center gap-1.5">
                   <Tag className="w-3.5 h-3.5 text-red-500 dark:text-red-400" />
                   <span>Kategori Pengeluaran</span>
                 </label>
@@ -308,10 +293,10 @@ export default function EditTransactionModal({
                       type="button"
                       key={cat}
                       onClick={() => setCategory(cat)}
-                      className={`py-2 px-2.5 rounded-xl text-xs font-medium border text-left truncate transition-all ${
+                      className={`py-2 px-2.5 rounded-xl text-xs font-semibold border text-left truncate transition-all ${
                         category === cat
-                          ? 'bg-red-50 dark:bg-red-950/70 border-red-500 text-red-700 dark:text-red-300 shadow-[0_0_12px_rgba(239,68,68,0.15)]'
-                          : 'bg-slate-50 dark:bg-[#0a0a0f] border-slate-200 dark:border-zinc-800 text-slate-700 dark:text-zinc-300 hover:border-slate-300 dark:hover:border-zinc-700'
+                          ? 'bg-red-50 dark:bg-red-950/70 border-red-500 text-red-800 dark:text-red-300 shadow-[0_0_12px_rgba(239,68,68,0.15)]'
+                          : 'bg-slate-50 dark:bg-[#0a0a0f] border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-300 hover:border-slate-300 dark:hover:border-zinc-700'
                       }`}
                     >
                       {cat}
@@ -331,17 +316,17 @@ export default function EditTransactionModal({
               {/* Nominal Pengeluaran */}
               <div>
                 <div className="flex items-center justify-between mb-1.5">
-                  <label className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-zinc-400 flex items-center gap-1.5">
+                  <label className="text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-zinc-400 flex items-center gap-1.5">
                     <DollarSign className="w-3.5 h-3.5 text-red-500 dark:text-red-400" />
                     <span>Nominal Pengeluaran</span>
                   </label>
-                  <span className="text-[11px] text-slate-500 dark:text-zinc-400">
-                    Maks: <span className="text-emerald-600 dark:text-emerald-400 font-semibold">{formatRupiah(maxAllowedExpense)}</span>
+                  <span className="text-[11px] text-slate-700 dark:text-zinc-400 font-medium">
+                    Maks: <span className="text-emerald-600 dark:text-emerald-400 font-bold">{formatRupiah(maxAllowedExpense)}</span>
                   </span>
                 </div>
 
                 <div className="relative">
-                  <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-sm font-semibold text-slate-400 dark:text-zinc-400 pointer-events-none">
+                  <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-sm font-bold text-slate-700 dark:text-zinc-400 pointer-events-none">
                     Rp
                   </div>
                   <input
@@ -353,7 +338,7 @@ export default function EditTransactionModal({
                       setErrorMessage(null);
                     }}
                     required
-                    className={`w-full bg-slate-50 dark:bg-[#0a0a0f] border rounded-xl pl-10 pr-3.5 py-2.5 text-sm text-slate-900 dark:text-white font-semibold focus:outline-none ${
+                    className={`w-full bg-slate-50 dark:bg-[#0a0a0f] border rounded-xl pl-10 pr-3.5 py-2.5 text-sm text-slate-950 dark:text-white font-semibold focus:outline-none ${
                       isExceedingExpense
                         ? 'border-red-500 focus:border-red-400'
                         : 'border-slate-300 dark:border-zinc-700/80 focus:border-red-500'
@@ -373,7 +358,7 @@ export default function EditTransactionModal({
 
           {/* Keterangan Rinci */}
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-zinc-400 mb-1.5">
+            <label className="block text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-zinc-400 mb-1.5">
               Keterangan Rinci
             </label>
             <textarea
@@ -381,7 +366,7 @@ export default function EditTransactionModal({
               placeholder="Tambahkan keterangan rincian jika ada..."
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full bg-slate-50 dark:bg-[#0a0a0f] border border-slate-300 dark:border-zinc-700/80 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-red-500 placeholder-slate-400 dark:placeholder-zinc-500 resize-none"
+              className="w-full bg-slate-50 dark:bg-[#0a0a0f] border border-slate-300 dark:border-zinc-700/80 rounded-xl px-3.5 py-2.5 text-sm text-slate-950 dark:text-white focus:outline-none focus:border-red-500 placeholder-slate-500 dark:placeholder-zinc-500 resize-none"
             />
           </div>
 
@@ -391,7 +376,7 @@ export default function EditTransactionModal({
               type="button"
               onClick={onClose}
               disabled={isSubmitting}
-              className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-slate-700 dark:text-zinc-300 text-xs sm:text-sm font-semibold transition-colors"
+              className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-slate-800 dark:text-zinc-300 text-xs sm:text-sm font-semibold transition-colors"
             >
               Batal
             </button>

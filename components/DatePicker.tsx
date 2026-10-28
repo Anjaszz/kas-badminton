@@ -164,7 +164,7 @@ export default function DatePicker({
   return (
     <div className={`relative ${className}`} ref={containerRef}>
       {label && (
-        <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-zinc-400 mb-1.5">
+        <label className="block text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-zinc-400 mb-1.5">
           {label}
         </label>
       )}
@@ -178,12 +178,12 @@ export default function DatePicker({
         }`}
       >
         <div className="flex items-center gap-2.5 truncate">
-          <CalendarIcon className="w-4 h-4 text-slate-400 dark:text-zinc-400 flex-shrink-0" />
-          <span className={value ? 'text-slate-900 dark:text-white font-medium' : 'text-slate-400 dark:text-zinc-500'}>
+          <CalendarIcon className="w-4 h-4 text-slate-600 dark:text-zinc-400 flex-shrink-0" />
+          <span className={value ? 'text-slate-950 dark:text-white font-semibold' : 'text-slate-600 dark:text-zinc-500'}>
             {value ? formatDateIndo(value) : placeholder}
           </span>
         </div>
-        <span className="text-[10px] font-semibold text-slate-500 dark:text-zinc-400 bg-white dark:bg-zinc-800/80 px-2 py-0.5 rounded border border-slate-200 dark:border-zinc-700">
+        <span className="text-[10px] font-bold text-slate-800 dark:text-zinc-400 bg-white dark:bg-zinc-800/80 px-2 py-0.5 rounded border border-slate-300 dark:border-zinc-700">
           Pilih
         </span>
       </button>
@@ -203,20 +203,20 @@ export default function DatePicker({
             <button
               type="button"
               onClick={prevMonth}
-              className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-zinc-800/70 dark:hover:bg-zinc-700 text-slate-600 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white transition-colors"
+              className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-zinc-800/70 dark:hover:bg-zinc-700 text-slate-800 dark:text-zinc-300 hover:text-black dark:hover:text-white transition-colors"
               title="Bulan sebelumnya"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
 
-            <span className="text-sm font-bold text-slate-900 dark:text-white tracking-wide">
+            <span className="text-sm font-bold text-slate-950 dark:text-white tracking-wide">
               {monthNames[viewMonth]} {viewYear}
             </span>
 
             <button
               type="button"
               onClick={nextMonth}
-              className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-zinc-800/70 dark:hover:bg-zinc-700 text-slate-600 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white transition-colors"
+              className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-zinc-800/70 dark:hover:bg-zinc-700 text-slate-800 dark:text-zinc-300 hover:text-black dark:hover:text-white transition-colors"
               title="Bulan berikutnya"
             >
               <ChevronRight className="w-4 h-4" />
@@ -229,7 +229,7 @@ export default function DatePicker({
               <span
                 key={d}
                 className={`text-[11px] font-bold ${
-                  idx === 0 ? 'text-red-500 dark:text-red-400' : 'text-slate-400 dark:text-zinc-500'
+                  idx === 0 ? 'text-red-600 dark:text-red-400' : 'text-slate-700 dark:text-zinc-500'
                 }`}
               >
                 {d}
@@ -244,7 +244,7 @@ export default function DatePicker({
               return (
                 <div
                   key={`prev-${i}`}
-                  className="h-8 flex items-center justify-center text-xs text-slate-300 dark:text-zinc-600 select-none"
+                  className="h-8 flex items-center justify-center text-xs text-slate-400 dark:text-zinc-600 select-none"
                 >
                   {dayNum}
                 </div>
@@ -261,12 +261,12 @@ export default function DatePicker({
                   type="button"
                   key={day}
                   onClick={() => handleSelectDate(day)}
-                  className={`h-8 w-8 mx-auto rounded-xl flex items-center justify-center text-xs font-medium transition-all ${
+                  className={`h-8 w-8 mx-auto rounded-xl flex items-center justify-center text-xs font-semibold transition-all ${
                     selected
                       ? 'bg-red-600 text-white font-bold shadow-md shadow-red-600/30 dark:shadow-red-900/50 scale-105'
                       : today
                       ? 'bg-emerald-50 dark:bg-zinc-800 border border-emerald-500 text-emerald-700 dark:text-emerald-400 font-bold hover:bg-emerald-100 dark:hover:bg-zinc-700'
-                      : 'text-slate-700 dark:text-zinc-200 hover:bg-slate-100 dark:hover:bg-zinc-800 hover:text-slate-900 dark:hover:text-white'
+                      : 'text-slate-900 dark:text-zinc-200 hover:bg-slate-100 dark:hover:bg-zinc-800 hover:text-black dark:hover:text-white'
                   }`}
                 >
                   {day}
@@ -280,21 +280,21 @@ export default function DatePicker({
             <button
               type="button"
               onClick={() => setQuickDate(-7)}
-              className="text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white px-2 py-1 rounded hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors"
+              className="text-slate-800 dark:text-zinc-400 font-medium hover:text-black dark:hover:text-white px-2 py-1 rounded hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors"
             >
               -1 Minggu
             </button>
             <button
               type="button"
               onClick={() => setQuickDate(-1)}
-              className="text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white px-2 py-1 rounded hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors"
+              className="text-slate-800 dark:text-zinc-400 font-medium hover:text-black dark:hover:text-white px-2 py-1 rounded hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors"
             >
               Kemarin
             </button>
             <button
               type="button"
               onClick={() => setQuickDate(0)}
-              className="text-emerald-600 dark:text-emerald-400 font-semibold hover:text-emerald-500 dark:hover:text-emerald-300 px-2 py-1 rounded hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors"
+              className="text-emerald-700 dark:text-emerald-400 font-bold hover:text-emerald-600 dark:hover:text-emerald-300 px-2 py-1 rounded hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors"
             >
               Hari Ini
             </button>

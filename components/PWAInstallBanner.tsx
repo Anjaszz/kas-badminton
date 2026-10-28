@@ -17,7 +17,6 @@ export default function PWAInstallBanner() {
   const [showIOSGuide, setShowIOSGuide] = useState(false);
 
   useEffect(() => {
-    // 1. Register Service Worker
     if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
       navigator.serviceWorker
         .register('/sw.js')
@@ -29,7 +28,6 @@ export default function PWAInstallBanner() {
         });
     }
 
-    // 2. Check if already running in standalone mode (installed app)
     const checkStandalone = () => {
       const isStandaloneMode =
         window.matchMedia('(display-mode: standalone)').matches ||
@@ -39,18 +37,15 @@ export default function PWAInstallBanner() {
     };
     checkStandalone();
 
-    // 3. Detect iOS device
     const userAgent = window.navigator.userAgent.toLowerCase();
     const isIOSDevice = /iphone|ipad|ipod/.test(userAgent);
     setIsIOS(isIOSDevice);
 
-    // 4. Check if previously dismissed in this session
     const dismissed = sessionStorage.getItem('kb_pwa_dismissed');
     if (dismissed === 'true') {
       setIsDismissed(true);
     }
 
-    // 5. Listen for beforeinstallprompt event
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
@@ -106,15 +101,15 @@ export default function PWAInstallBanner() {
 
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-1.5">
-                <span className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white truncate">
+                <span className="text-xs sm:text-sm font-bold text-slate-950 dark:text-white truncate">
                   Install Aplikasi Kas Badminton
                 </span>
-                <span className="hidden xs:inline-flex items-center gap-0.5 px-1.5 py-0.2 rounded text-[9px] font-bold bg-red-100 dark:bg-red-600/20 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-500/30">
+                <span className="hidden xs:inline-flex items-center gap-0.5 px-1.5 py-0.2 rounded text-[9px] font-bold bg-red-100 dark:bg-red-600/20 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-500/30">
                   <Sparkles className="w-2.5 h-2.5 text-red-600 dark:text-red-400" />
                   PWA
                 </span>
               </div>
-              <p className="text-[11px] text-slate-600 dark:text-zinc-300 truncate">
+              <p className="text-[11px] text-slate-800 dark:text-zinc-300 font-medium truncate">
                 Pasang di layar utama HP / Laptop untuk akses cepat & lancar!
               </p>
             </div>
@@ -133,7 +128,7 @@ export default function PWAInstallBanner() {
             <button
               onClick={handleDismiss}
               title="Tutup informasi install"
-              className="p-1.5 text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/70 dark:hover:bg-zinc-800/80 rounded-lg transition-colors"
+              className="p-1.5 text-slate-700 dark:text-zinc-400 hover:text-slate-950 dark:hover:text-white hover:bg-slate-200/70 dark:hover:bg-zinc-800/80 rounded-lg transition-colors"
             >
               <X className="w-4 h-4" />
             </button>
@@ -152,26 +147,26 @@ export default function PWAInstallBanner() {
                   <Smartphone className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-slate-900 dark:text-white">Cara Pasang di iPhone/iPad</h4>
-                  <p className="text-[11px] text-slate-500 dark:text-zinc-400">Gunakan browser Safari</p>
+                  <h4 className="text-sm font-bold text-slate-950 dark:text-white">Cara Pasang di iPhone/iPad</h4>
+                  <p className="text-[11px] text-slate-700 dark:text-zinc-400 font-medium">Gunakan browser Safari</p>
                 </div>
               </div>
               <button
                 onClick={() => setShowIOSGuide(false)}
-                className="p-1 text-slate-400 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white rounded-lg hover:bg-slate-100 dark:hover:bg-zinc-800"
+                className="p-1 text-slate-600 dark:text-zinc-400 hover:text-slate-950 dark:hover:text-white rounded-lg hover:bg-slate-100 dark:hover:bg-zinc-800"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            <div className="space-y-3 text-xs text-slate-600 dark:text-zinc-300">
+            <div className="space-y-3 text-xs text-slate-800 dark:text-zinc-300">
               <div className="flex items-start gap-2.5 p-2.5 rounded-xl bg-slate-50 dark:bg-[#0a0a0f] border border-slate-200 dark:border-zinc-800">
                 <span className="flex items-center justify-center w-5 h-5 rounded-full bg-red-600 text-white font-bold text-[10px] shrink-0">
                   1
                 </span>
                 <p>
-                  Ketuk tombol <strong className="text-slate-900 dark:text-white">Share</strong> (
-                  <Share2 className="w-3.5 h-3.5 inline mx-0.5 text-blue-500 dark:text-blue-400" />
+                  Ketuk tombol <strong className="text-slate-950 dark:text-white">Share</strong> (
+                  <Share2 className="w-3.5 h-3.5 inline mx-0.5 text-blue-600 dark:text-blue-400" />
                   ) di bilah bawah Safari Anda.
                 </p>
               </div>
@@ -181,7 +176,7 @@ export default function PWAInstallBanner() {
                   2
                 </span>
                 <p>
-                  Gulir ke bawah dan pilih menu <strong className="text-slate-900 dark:text-white">&quot;Tambah ke Layar Utama&quot;</strong> (
+                  Gulir ke bawah dan pilih menu <strong className="text-slate-950 dark:text-white">&quot;Tambah ke Layar Utama&quot;</strong> (
                   <PlusSquare className="w-3.5 h-3.5 inline mx-0.5 text-emerald-600 dark:text-emerald-400" />
                   Add to Home Screen).
                 </p>
@@ -192,7 +187,7 @@ export default function PWAInstallBanner() {
                   3
                 </span>
                 <p>
-                  Ketuk <strong className="text-slate-900 dark:text-white">&quot;Tambah&quot;</strong> di pojok kanan atas. Ikon aplikasi akan langsung muncul di menu HP Anda! 🏸
+                  Ketuk <strong className="text-slate-950 dark:text-white">&quot;Tambah&quot;</strong> di pojok kanan atas. Ikon aplikasi akan langsung muncul di menu HP Anda! 🏸
                 </p>
               </div>
             </div>
